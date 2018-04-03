@@ -1,0 +1,19 @@
+{
+  "name": "adotebot-functions",
+  "version": "0.1.0",
+  "description": "Search, store and retweet information about pets up for adoption.",
+  "main": "handler.js",
+  "devDependencies": {
+    "@types/aws-lambda": "0.0.22",
+    "@types/node": "^8.0.57",
+    "serverless-webpack": "^4.0.0",
+    "ts-loader": "^2.3.7",
+    "typescript": "^2.5.2",
+    "webpack": "^3.6.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.177.0",
+    "moment": "^2.22.0",
+    "twit": "^2.2.9"
+  }
+}

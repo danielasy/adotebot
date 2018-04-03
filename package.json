@@ -1,0 +1,18 @@
+{
+  "name": "adotebot",
+  "description": "Spread information on Twitter about pets up for adoption.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielasy/adotebot.git"
+  },
+  "keywords": [
+    "twitter",
+    "bot"
+  ],
+  "author": "Daniela Sayuri Yassuda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielasy/adotebot/issues"
+  },
+  "homepage": "https://github.com/danielasy/adotebot#readme"
+}
