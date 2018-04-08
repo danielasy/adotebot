@@ -10,6 +10,10 @@ provider:
   profile: serverless
   environment:
     DYNAMODB_TABLE: ${file(./env.yml):DYNAMODB_TABLE}
+    TWITTER_CONSUMER_KEY: ${file(./env.yml):TWITTER_CONSUMER_KEY}
+    TWITTER_CONSUMER_SECRET: ${file(./env.yml):TWITTER_CONSUMER_SECRET}
+    TWITTER_ACCESS_TOKEN: ${file(./env.yml):TWITTER_ACCESS_TOKEN}
+    TWITTER_ACCESS_TOKEN_SECRET: ${file(./env.yml):TWITTER_ACCESS_TOKEN_SECRET}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -24,16 +28,23 @@ provider:
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 functions:
+  api:
+    handler: src/api.handler
+    description: API to get tweets and update their review status
+    events:
+      - http:
+          path: tweets
+          method: get
+          cors: true
+      - http:
+          path: tweets/{id}
+          method: put
+          cors: true
   collectTweets:
     handler: src/collectTweets.handler
     description: Collect Tweets about pets up for adoption and save them to DynamoDB
     events:
       - schedule: rate(1 hour)
-    environment:
-      TWITTER_CONSUMER_KEY: ${file(./env.yml):TWITTER_CONSUMER_KEY}
-      TWITTER_CONSUMER_SECRET: ${file(./env.yml):TWITTER_CONSUMER_SECRET}
-      TWITTER_ACCESS_TOKEN: ${file(./env.yml):TWITTER_ACCESS_TOKEN}
-      TWITTER_ACCESS_TOKEN_SECRET: ${file(./env.yml):TWITTER_ACCESS_TOKEN_SECRET}
 
 resources:
   Resources:
