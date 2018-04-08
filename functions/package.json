@@ -4,7 +4,7 @@
   "description": "Search, store and retweet information about pets up for adoption.",
   "main": "handler.js",
   "devDependencies": {
-    "@types/aws-lambda": "0.0.22",
+    "@types/aws-lambda": "0.0.35",
     "@types/node": "^8.0.57",
     "serverless-webpack": "^4.0.0",
     "ts-loader": "^2.3.7",
