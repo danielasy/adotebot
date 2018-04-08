@@ -29,46 +29,36 @@ export const handler = () => {
     lang: 'pt',
     result_type: 'recent',
     tweet_mode: 'extended',
-  }, function(err, data, response) {
+  }, function(err, data) {
     if (data.statuses) {
       console.info(`Results found: ${data.statuses.length}`);
 
-      const tweets = [];
-
       data.statuses.forEach(function(status) {
-        const item = {
-          PutRequest: {
-            Item: {
-              id: { S: status.id_str },
-              full_text: { S: status.full_text },
-              created_at: { S: moment(status.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY', 'en').format() },
-              user_id: { S: status.user.id_str },
-              user_name: { S: status.user.name },
-              user_screen_name: { S: status.user.screen_name },
-              review_status: { S: ReviewStatus.NOT_REVIEWED },
-            },
+        const request = {
+          TableName: process.env.DYNAMODB_TABLE,
+          Item: {
+            id: { S: status.id_str },
+            full_text: { S: status.full_text },
+            created_at: { S: moment(status.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY', 'en').format() },
+            user_id: { S: status.user.id_str },
+            user_name: { S: status.user.name },
+            user_screen_name: { S: status.user.screen_name },
+            review_status: { S: ReviewStatus.NOT_REVIEWED },
+          },
+          ConditionExpression: 'id <> :id',
+          ExpressionAttributeValues: {
+            ':id': { S: status.id_str },
           },
         };
 
-        tweets.push(item);
-      });
-
-      // DynamoDB limits batch write to 25 items
-      for (let i = 0; i < tweets.length; i += 25) {
-        const params = {
-          RequestItems: {
-            [process.env.DYNAMODB_TABLE]: tweets.slice(i, i + 25),
-          },
-        };
-
-        dynamodb.batchWriteItem(params, function(err, data) {
+        dynamodb.putItem(request, function(err, data) {
           if (err) {
             console.error(err, err.stack);
           } else {
             console.info('DynamoDB write was successful', data);
           }
         });
-      }
+      });
     } else if (err) {
       console.error(err);
     }
