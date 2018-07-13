@@ -45,6 +45,11 @@ functions:
     description: Collect Tweets about pets up for adoption and save them to DynamoDB
     events:
       - schedule: rate(1 hour)
+  retweetApproved:
+    handler: src/retweetApproved.handler
+    description: Retweet approved messages about pets up for adoption
+    events:
+      - schedule: cron(0/30 12-0 * * ? *)
 
 resources:
   Resources:
